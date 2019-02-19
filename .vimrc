@@ -48,7 +48,7 @@
 
     " Vim window manager. CTRL-N, CTRL-C (Close), CTRL-space (Make active
     " window), CTRL-J (Next), CTRL-K (Prev)
-    NeoBundle 'spolu/dwm.vim'
+    " NeoBundle 'spolu/dwm.vim'
 
     " Track the snippets engine.
     " CTRL-C to use
@@ -81,33 +81,26 @@
     NeoBundle 'Shougo/neosnippet.vim'
     NeoBundle 'Shougo/neosnippet-snippets'
 
+    " Vue
+    NeoBundle 'posva/vim-vue'
+
     " Sparkup for HTML voodoo
     " CTRL-y, to convert
-    NeoBundleLazy 'mattn/emmet-vim', { 'filetypes' : ['javascript', 'html', 'php'] }
+    " NeoBundleLazy 'mattn/emmet-vim', { 'filetypes' : ['javascript', 'html', 'php'] }
 
     " Syntax, tabs, indenting, etc. for PHP, JS, Puppet, Go, Coffee
-    NeoBundleLazy 'StanAngeloff/php.vim', { 'filetypes' : ['javascript', 'html', 'php', 'jinja'] }
-    NeoBundleLazy 'pangloss/vim-javascript', { 'filetypes' : ['javascript', 'html', 'php', 'jinja'] }
-    NeoBundleLazy 'maksimr/vim-jsbeautify', { 'filetypes' : ['javascript', 'html', 'php', 'jinja', 'css'] }
-    NeoBundleLazy 'einars/js-beautify', { 'filetypes' : ['javascript', 'html', 'php', 'jinja', 'css'] }
+    " NeoBundleLazy 'StanAngeloff/php.vim', { 'filetypes' : ['javascript', 'html', 'php', 'jinja'] }
+    " NeoBundleLazy 'pangloss/vim-javascript', { 'filetypes' : ['javascript', 'html', 'php', 'jinja'] }
+    " NeoBundleLazy 'maksimr/vim-jsbeautify', { 'filetypes' : ['javascript', 'html', 'php', 'jinja', 'css'] }
+    " NeoBundleLazy 'einars/js-beautify', { 'filetypes' : ['javascript', 'html', 'php', 'jinja', 'css'] }
     NeoBundleLazy 'rodjek/vim-puppet', { 'filetypes' : ['puppet'] }
     NeoBundleLazy 'fatih/vim-go', { 'filetypes' : ['go'] }
-    NeoBundleLazy 'kchmck/vim-coffee-script', { 'filetypes' : ['coffee', 'javascript', 'html', 'jinja'] }
+    " NeoBundleLazy 'kchmck/vim-coffee-script', { 'filetypes' : ['coffee', 'javascript', 'html', 'jinja'] }
     NeoBundleLazy 'plasticboy/vim-markdown', { 'filetypes' : ['mkd'] }
     NeoBundleLazy 'elzr/vim-json', { 'filetypes' : ['json', 'jinja'] }
     NeoBundleLazy 'groenewege/vim-less', { 'filetypes' : ['less'] }
     NeoBundleLazy 'mitsuhiko/vim-jinja', { 'filetypes' : ['html', 'jinja'] }
     NeoBundleLazy 'sophacles/vim-bundle-mako', { 'filetypes' : ['html', 'jinja'] }
-
-    " NOT WORKING WITH HOMEBREW VIM. :( Keeping to try out later.
-    " YouCompleteMe uses jedi to complete for Python and works for many other
-    " languages. This replaces python-mode.
-    " NeoBundle 'Valloric/YouCompleteMe.git' , {
-          " \     'build' : {
-          " \         'mac' : './install.sh --clang-completer',
-          " \         'unix' : './install.sh --clang-completer --system-libclang'
-          " \     },
-          " \ }
 
     " vimproc needs a special build
     NeoBundle 'Shougo/vimproc', {
@@ -297,7 +290,6 @@
     inoremap <S-Up> <Esc>10ki
     vnoremap <S-Down> 10j
     vnoremap <S-Up> 10k
-
     " Send the selected hunk to IWS's hastebin
     vnoremap <Leader>hb <esc>:'<,'>:w !HASTE_SERVER=http://hastebin.britecorepro.com haste<CR>
     " Jump easily between open windows
@@ -345,6 +337,7 @@
     let coffee_make_options='--bare'
     let g:syntastic_check_on_open=1 " Run Syntastic when opening files
     let g:syntastic_python_checkers=['python', 'flake8'] " Be more strict in python syntax
+    let g:syntastic_vue_checkers=['ESLint']
     let g:ftplugin_sql_omni_key='<C-S>' " reset sql omni key
     let NERDSpaceDelims=1 " Add space delimiters
     let g:gitgutter_eager=0 " Only run gitgutter on read/write of files
@@ -503,10 +496,10 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 " }
 
 " Autocmds {
-    autocmd FileType javascript noremap <buffer>  <Leader>js :call JsBeautify()<cr>
+    " autocmd FileType javascript noremap <buffer>  <Leader>js :call JsBeautify()<cr>
     autocmd FileType html noremap <buffer> <Leader>js :call HtmlBeautify()<cr>
     autocmd FileType css noremap <buffer> <Leader>js :call CSSBeautify()<cr>
-    autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+    " autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
     autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
     autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
     autocmd FileType gitcommit setlocal colorcolumn=50
@@ -520,7 +513,14 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     augroup javascript_au
         autocmd!
         " Add debugger key command for JS
-        au BufNewFile,BufReadPost *.js nnoremap <Leader>b :call InsertDebugLine("debugger;", line('.'))<return>
+        " au BufNewFile,BufReadPost *.js nnoremap <Leader>b :call InsertDebugLine("debugger;", line('.'))<return>
+        " Comment this line out if you're in BC
+        au BufNewFile,BufReadPost *.vue setl expandtab tabstop=2 shiftwidth=2 softtabstop=2 nolist
+    augroup END
+    augroup vue_au
+        autocmd!
+        " Add debugger key command for Vue.js
+        au BufNewFile,BufReadPost *.vue setl expandtab tabstop=2 shiftwidth=2 softtabstop=2 nolist
     augroup END
     augroup less_au
         autocmd!
